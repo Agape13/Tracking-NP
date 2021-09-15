@@ -23,10 +23,10 @@ def apirequest(tracks):
         }
     }
     data = requests.post(api_url, json=params).json()
-    res = []
+    res = dict()
     if 'success' in data:
         for i in range(len(data['data'])):
-            res.append(data['data'][i]['Status'][:35])
+            res[data['data'][i]['Number']] = data['data'][i]['Status'][:35]
     else:
         res = ['Не вдалося здійснити перевірку.', 'Спробуйте пізніше.']
     return res
@@ -34,11 +34,13 @@ def apirequest(tracks):
 #Filling textareas
 def reqtracks(tbox, rbox):
     tracks = tbox.get('1.0', 'end').split()
+    data = apirequest(tracks)
+    print(data)
     tbox.delete('1.0', 'end')
-    tbox.insert(END, '\n\n'.join(tracks))
+    tbox.insert(END, '\n\n'.join(data.keys()))
     rbox.config(state=NORMAL)
     rbox.delete('1.0', 'end')
-    rbox.insert(END, '\n\n'.join(apirequest(tracks)))
+    rbox.insert(END, '\n\n'.join(data.values()))
     rbox.config(state=DISABLED)
 
 win=Tk()
