@@ -35,7 +35,6 @@ def apirequest(tracks):
 def reqtracks(tbox, rbox):
     tracks = tbox.get('1.0', 'end').split()
     data = apirequest(tracks)
-    print(data)
     tbox.delete('1.0', 'end')
     tbox.insert(END, '\n\n'.join(data.keys()))
     rbox.config(state=NORMAL)
